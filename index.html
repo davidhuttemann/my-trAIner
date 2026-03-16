@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>my trAIner – Your AI Personal Trainer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #6c63ff;
+      --accent-dark: #4e46e5;
+      --bg: #0d0d0f;
+      --surface: #16161a;
+      --surface2: #1e1e24;
+      --text: #f0f0f5;
+      --muted: #8888a0;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 6vw;
+      position: sticky;
+      top: 0;
+      background: rgba(13,13,15,0.85);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .logo { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px; }
+    .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    nav ul a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.55rem 1.3rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent-dark); }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 7rem 6vw 5rem;
+      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(108,99,255,0.25), transparent);
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(108,99,255,0.15);
+      color: var(--accent);
+      border: 1px solid rgba(108,99,255,0.3);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.9rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.12;
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    h1 .highlight {
+      background: linear-gradient(90deg, #6c63ff, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.15rem;
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+    }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      padding: 0.85rem 2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      padding: 0.85rem 2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.12);
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.1s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+    /* STATS */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      padding: 3rem 6vw;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat-item { text-align: center; }
+    .stat-item strong { display: block; font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
+    .stat-item span { color: var(--muted); font-size: 0.88rem; }
+
+    /* FEATURES */
+    .section { padding: 5rem 6vw; }
+    .section-label {
+      text-align: center;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+    }
+    h2 {
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 0.75rem;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 3.5rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: rgba(108,99,255,0.4); transform: translateY(-3px); }
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: rgba(108,99,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.2rem;
+    }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .feature-card p { color: var(--muted); font-size: 0.9rem; }
+
+    /* HOW IT WORKS */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      counter-reset: steps;
+    }
+    .step { text-align: center; }
+    .step-number {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+    }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .step p { color: var(--muted); font-size: 0.88rem; }
+
+    /* TESTIMONIALS */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .testimonial {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+    }
+    .stars { color: #f59e0b; font-size: 0.9rem; margin-bottom: 0.9rem; }
+    .testimonial p { color: var(--muted); font-size: 0.92rem; margin-bottom: 1.2rem; }
+    .reviewer { display: flex; align-items: center; gap: 0.75rem; }
+    .avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem;
+      color: #fff;
+    }
+    .reviewer-info strong { display: block; font-size: 0.88rem; }
+    .reviewer-info span { color: var(--muted); font-size: 0.8rem; }
+
+    /* CTA BANNER */
+    .cta-section {
+      padding: 5rem 6vw;
+      text-align: center;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(108,99,255,0.18), transparent);
+    }
+    .cta-section h2 { margin-bottom: 1rem; }
+    .cta-section p { color: var(--muted); max-width: 440px; margin: 0 auto 2.5rem; }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem 6vw;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+    .footer-links { display: flex; gap: 1.5rem; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">my tr<span>AI</span>ner</div>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+    </ul>
+    <button class="nav-cta">Start Free</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge">AI-Powered Training</div>
+    <h1>Your <span class="highlight">personal trainer</span>,<br>available 24/7</h1>
+    <p>my trAIner builds adaptive workout plans, tracks your progress, and coaches you in real time — all powered by AI.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Get Started Free</button>
+      <button class="btn-secondary">Watch Demo ▶</button>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-item"><strong>250K+</strong><span>Active users</span></div>
+    <div class="stat-item"><strong>4.9★</strong><span>App store rating</span></div>
+    <div class="stat-item"><strong>18M+</strong><span>Workouts completed</span></div>
+    <div class="stat-item"><strong>92%</strong><span>Hit their goals</span></div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <p class="section-label">Features</p>
+    <h2>Everything you need to train smarter</h2>
+    <p class="section-sub">No guesswork. No one-size-fits-all plans. Just intelligent coaching built around you.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>Adaptive Plans</h3>
+        <p>Your plan evolves automatically based on your performance, recovery, and goals — updated every session.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Progress Analytics</h3>
+        <p>Visualize strength gains, body composition trends, and workout consistency in one clean dashboard.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🩹</div>
+        <h3>Injury & Recovery Management</h3>
+        <p>my trAIner detects movement limitations, adjusts exercises around injuries, and rebuilds your program as you recover.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🥗</div>
+        <h3>Nutrition Sync</h3>
+        <p>Log meals and let my trAIner align your macros with your training load for optimal performance and recovery.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">😴</div>
+        <h3>Recovery Insights</h3>
+        <p>Sleep and HRV data feed directly into your schedule, so you train hard when you're ready and rest when you're not.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3>Device Integration</h3>
+        <p>Works with Apple Watch, Garmin, Whoop, Fitbit, and more — your data, unified in one place.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how" style="background: var(--surface);">
+    <p class="section-label">How it works</p>
+    <h2>Up and running in minutes</h2>
+    <p class="section-sub">Getting started takes less time than a warm-up set.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Create your profile</h3>
+        <p>Tell us your goals, fitness level, and available equipment. Takes about 2 minutes.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Get your plan</h3>
+        <p>my trAIner generates a fully personalised weekly programme instantly — no waiting.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Train with AI</h3>
+        <p>Follow guided sessions with live coaching, then log your results in seconds.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <h3>Watch it adapt</h3>
+        <p>Your plan improves after every workout, continuously optimising for faster results.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" id="testimonials">
+    <p class="section-label">Testimonials</p>
+    <h2>Real people, real results</h2>
+    <p class="section-sub">Thousands of members have transformed their fitness with my trAIner.</p>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"I've tried every fitness app out there. my trAIner is the first one that actually felt like it understood my schedule and adjusted when life got busy."</p>
+        <div class="reviewer">
+          <div class="avatar">JM</div>
+          <div class="reviewer-info"><strong>Jordan M.</strong><span>Lost 14 kg in 4 months</span></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"The real-time coaching during my runs is a game changer. It's like having a coach in my ear without the $200/hr price tag."</p>
+        <div class="reviewer">
+          <div class="avatar">SR</div>
+          <div class="reviewer-info"><strong>Sam R.</strong><span>Marathon finisher, 3:42</span></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p>"Went from barely being able to bench 60 kg to hitting a 100 kg PR in six months. The progressive overload logic is seriously impressive."</p>
+        <div class="reviewer">
+          <div class="avatar">AK</div>
+          <div class="reviewer-info"><strong>Alex K.</strong><span>Gained 8 kg muscle</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Start your transformation today</h2>
+    <p>Free for 14 days. No credit card required. Cancel anytime.</p>
+    <button class="btn-primary" style="font-size: 1.05rem; padding: 1rem 2.5rem;">Get Started — It's Free</button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">my tr<span>AI</span>ner</div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Support</a>
+    </div>
+    <span>© 2026 my trAIner. All rights reserved.</span>
+  </footer>
+
+</body>
+</html>
