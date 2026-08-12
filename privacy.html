@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy – MyTrainer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #6c63ff;
+      --bg: #0d0d0f;
+      --surface: #16161a;
+      --text: #f0f0f5;
+      --muted: #8888a0;
+      --line: #2a2a33;
+      --radius: 14px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.65;
+      padding: 3rem 1.25rem 6rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap { max-width: 46rem; margin: 0 auto; }
+
+    header { border-bottom: 1px solid var(--line); padding-bottom: 1.5rem; margin-bottom: 2.5rem; }
+    h1 { font-size: clamp(1.9rem, 5vw, 2.5rem); letter-spacing: -0.02em; margin-bottom: .4rem; }
+    .updated { color: var(--muted); font-size: .92rem; }
+
+    h2 {
+      font-size: 1.25rem; letter-spacing: -0.01em;
+      margin: 2.5rem 0 .75rem; padding-top: .5rem;
+    }
+    h3 { font-size: 1rem; margin: 1.5rem 0 .5rem; color: var(--accent); }
+
+    p, li { color: #d8d8e4; }
+    p { margin-bottom: 1rem; }
+    ul { margin: 0 0 1rem 1.25rem; }
+    li { margin-bottom: .5rem; }
+
+    a { color: var(--accent); }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 1.25rem 1.4rem; margin-bottom: 1.5rem;
+    }
+    .card p:last-child { margin-bottom: 0; }
+
+    .table-scroll { overflow-x: auto; margin-bottom: 1.5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    th, td { text-align: left; padding: .6rem .8rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; }
+
+    footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Privacy Policy</h1>
+      <p class="updated">MyTrainer · Last updated 12 August 2026</p>
+    </header>
+
+    <p>MyTrainer is an AI-assisted personal training app developed and operated by David Huttemann (“we”, “us”). This policy explains what the app collects, why, who it is shared with, and how to get it deleted.</p>
+
+    <div class="card">
+      <p><strong>The short version.</strong> MyTrainer stores your training data on your device and, once you create an account, in your own private area of our cloud database. Your coach conversations and training context are sent to Anthropic to generate coaching replies. There is no advertising, no analytics, no tracking across other apps or websites, and nothing is sold to anyone. You can delete your account and all of its cloud data from inside the app at any time.</p>
+    </div>
+
+    <h2>1. Information we collect</h2>
+
+    <h3>Account information</h3>
+    <ul>
+      <li><strong>Email address and password.</strong> Used to create your account and sign you in. Authentication is handled by Supabase; your password is stored only as a salted hash, and we never see it.</li>
+    </ul>
+
+    <h3>Information you provide</h3>
+    <ul>
+      <li><strong>Profile:</strong> name, training goal, training background, weekly availability, available equipment, injuries, age, weight, height, gender, and any additional notes you choose to add.</li>
+      <li><strong>Coach conversations:</strong> the messages you send to the in-app coach, the coach's replies, and periodic summaries of those conversations used to give the coach memory of earlier sessions.</li>
+    </ul>
+
+    <h3>Information the app generates as you use it</h3>
+    <ul>
+      <li><strong>Your training program:</strong> the workouts scheduled for each date, including any changes you accept from the coach.</li>
+      <li><strong>Workout logs:</strong> exercise names, sets, repetitions, weights, distances, durations, and when each set was recorded.</li>
+      <li><strong>Exercise form guides</strong> generated for exercises you look up.</li>
+      <li><strong>App preferences,</strong> such as your light/dark appearance setting.</li>
+      <li><strong>Usage counters:</strong> the number of AI requests your account makes each day and the size of those requests. We use these solely to enforce fair-use limits and control costs.</li>
+    </ul>
+
+    <div class="card">
+      <p><strong>Health-related information.</strong> Some of what you provide — weight, height, injuries, and your training history — describes your physical condition. We treat it as sensitive. It is used only to personalise your program and coaching, and it is never used for advertising or sold to anyone. By entering this information you consent to it being processed for those purposes.</p>
+    </div>
+
+    <h3>What we do <em>not</em> collect</h3>
+    <ul>
+      <li>No advertising identifiers, and no tracking of you across other apps or websites.</li>
+      <li>No analytics or crash-reporting services. The app contains no third-party analytics or advertising SDKs.</li>
+      <li>No location data, contacts, photos, microphone, or camera access.</li>
+      <li>No payment information. The app does not process payments.</li>
+    </ul>
+
+    <h2>2. How your information is stored</h2>
+    <p>Your data is written first to a database on your own device, so the app works without a connection. When you are signed in and online, it is also synchronised to our cloud database, hosted by Supabase.</p>
+    <p>Cloud data is protected by row-level security rules enforced by the database itself: each row is tied to your account, and a request authenticated as another account cannot read or modify it. Data is encrypted in transit using HTTPS and encrypted at rest by our hosting provider.</p>
+
+    <h2>3. Who your information is shared with</h2>
+    <p>We do not sell your personal information, and we do not share it for advertising. It is shared only with the service providers below, only to the extent needed to make the app work.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Provider</th><th>What they receive</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Supabase</td>
+            <td>Your account credentials and all synchronised app data</td>
+            <td>Authentication, database hosting, and server-side functions</td>
+          </tr>
+          <tr>
+            <td>Anthropic</td>
+            <td>Your coach messages, together with the profile, program and recent training context needed to answer them</td>
+            <td>Generating coaching replies, program suggestions, and exercise form guides</td>
+          </tr>
+          <tr>
+            <td>ExerciseDB (via RapidAPI)</td>
+            <td>The name of an exercise you are viewing. No account or personal information is sent.</td>
+            <td>Looking up reference information about exercises</td>
+          </tr>
+          <tr>
+            <td>Apple</td>
+            <td>Whatever the App Store collects when you download or update the app</td>
+            <td>App distribution, governed by Apple's own privacy policy</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Each of these providers processes data on our instructions under their own privacy terms: <a href="https://supabase.com/privacy">Supabase</a>, <a href="https://www.anthropic.com/legal/privacy">Anthropic</a>, <a href="https://rapidapi.com/privacy/">RapidAPI</a>.</p>
+
+    <p>We may also disclose information where we are legally required to, or where it is necessary to protect the rights or safety of our users.</p>
+
+    <h2>4. How long we keep it</h2>
+    <p>Your data is kept for as long as your account exists. If you delete your account, the account and everything stored in the cloud for it are deleted immediately and permanently.</p>
+    <p>Data held on your own device is under your control. Deleting your account does not erase the copy on your phone — that is deliberate, so you do not lose your training history by closing an account. To remove the device copy, delete the app.</p>
+
+    <h2>5. Your choices and rights</h2>
+    <ul>
+      <li><strong>Delete your account and cloud data.</strong> Account tab → Delete account. This is immediate and cannot be undone.</li>
+      <li><strong>Access and correct your information.</strong> Your profile and training data are visible and editable throughout the app.</li>
+      <li><strong>Use the app without syncing.</strong> Sign out and your data stays on your device only; nothing is uploaded while you are signed out.</li>
+      <li><strong>Request a copy of your data,</strong> by contacting us at the address below.</li>
+    </ul>
+    <p>Depending on where you live, you may have additional rights — including under the EU/UK GDPR and the California Consumer Privacy Act — to access, correct, export, restrict, or object to the processing of your personal information, and to withdraw consent. We do not sell personal information or share it for cross-context behavioural advertising, and we will not discriminate against you for exercising any of these rights. To make a request, email us; we will respond within the period required by applicable law.</p>
+
+    <h2>6. Children</h2>
+    <p>MyTrainer is not intended for anyone under 13, and we do not knowingly collect personal information from children under 13. If you believe a child has provided us with personal information, contact us and we will delete it.</p>
+
+    <h2>7. Changes to this policy</h2>
+    <p>We may update this policy as the app changes. The “last updated” date at the top will always reflect the current version, and material changes will be announced in the app.</p>
+
+    <h2>8. Contact</h2>
+    <p>Questions about this policy, or requests about your data:<br />
+      <a href="mailto:mytrainer.privacy@gmail.com">mytrainer.privacy@gmail.com</a></p>
+
+    <footer>
+      MyTrainer is a fitness application. It provides general training guidance and is not a medical device. It does not provide medical advice, diagnosis, or treatment — consult a qualified professional before starting or changing an exercise program.
+    </footer>
+  </div>
+</body>
+</html>
