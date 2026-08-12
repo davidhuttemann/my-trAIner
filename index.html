@@ -3,369 +3,301 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyTrainer – Your AI Personal Trainer</title>
+  <title>MyTrainer — an AI coach that adapts to your week</title>
+  <meta name="description" content="MyTrainer builds a training program around your goals, schedule, equipment and injuries — and changes it when your week does." />
+
+  <!-- DM Serif Display is the app's display face; using it here makes the site
+       and the product read as one thing rather than two. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet" />
+
   <style>
+    /* Palette lifted verbatim from the app's theme.ts, including both themes —
+       the site follows the visitor's system setting exactly as the app does. */
+    :root {
+      --canvas:      #F6F1E8;
+      --surface:     #FDFBF7;
+      --sunken:      #EFE8DB;
+      --ink:         #1B1917;
+      --ink-soft:    #6B6157;
+      --ink-faint:   #A99E8D;
+      --line:        #E6DECF;
+      --accent:      #9A6E43;
+      --accent-soft: #EFE3D2;
+
+      --display: "DM Serif Display", "Iowan Old Style", Palatino, Georgia, serif;
+      --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      --measure: 62rem;
+      --radius: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --canvas:      #17130E;
+        --surface:     #201B15;
+        --sunken:      #120F0B;
+        --ink:         #F2ECDF;
+        --ink-soft:    #A99D8B;
+        --ink-faint:   #6D6353;
+        --line:        #2E2820;
+        --accent:      #C79A63;
+        --accent-soft: #2A2318;
+      }
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --accent: #6c63ff;
-      --accent-dark: #4e46e5;
-      --bg: #0d0d0f;
-      --surface: #16161a;
-      --surface2: #1e1e24;
-      --text: #f0f0f5;
-      --muted: #8888a0;
-      --radius: 14px;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* NAV */
+    .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── Nav ──────────────────────────────────────────────────────────────── */
     nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.25rem 6vw;
-      position: sticky;
-      top: 0;
-      background: rgba(13,13,15,0.85);
-      backdrop-filter: blur(12px);
-      z-index: 100;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--canvas) 88%, transparent);
+      backdrop-filter: saturate(150%) blur(12px);
+      border-bottom: 1px solid var(--line);
     }
-    .logo { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px; }
-    .logo span { color: var(--accent); }
-    nav ul { list-style: none; display: flex; gap: 2rem; }
-    nav ul a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-    nav ul a:hover { color: var(--text); }
-    .nav-cta {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 0.55rem 1.3rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
+    .nav-inner {
+      max-width: var(--measure); margin: 0 auto; padding: 0.9rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
     }
-    .nav-cta:hover { background: var(--accent-dark); }
+    .wordmark { font-family: var(--display); font-size: 1.35rem; letter-spacing: .01em; }
+    .wordmark span { color: var(--accent); }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; font-size: .95rem; }
+    .nav-links a { color: var(--ink-soft); text-decoration: none; }
+    .nav-links a:hover, .nav-links a:focus-visible { color: var(--ink); }
+    @media (max-width: 34rem) { .nav-links { display: none; } }
 
-    /* HERO */
-    .hero {
-      text-align: center;
-      padding: 7rem 6vw 5rem;
-      background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(108,99,255,0.25), transparent);
-    }
-    .badge {
-      display: inline-block;
-      background: rgba(108,99,255,0.15);
-      color: var(--accent);
-      border: 1px solid rgba(108,99,255,0.3);
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 0.3rem 0.9rem;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
+    /* ── Hero ─────────────────────────────────────────────────────────────── */
+    .hero { padding: 6rem 0 4.5rem; }
+    .eyebrow {
+      font-family: var(--mono); font-size: .74rem; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem;
     }
     h1 {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      line-height: 1.12;
-      max-width: 750px;
-      margin: 0 auto 1.5rem;
+      font-family: var(--display); font-weight: 400;
+      font-size: clamp(2.4rem, 6.5vw, 4rem); line-height: 1.08;
+      letter-spacing: -0.015em; text-wrap: balance; margin-bottom: 1.25rem;
     }
-    h1 .highlight {
-      background: linear-gradient(90deg, #6c63ff, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .lede { font-size: 1.15rem; color: var(--ink-soft); max-width: 34rem; }
+    .hero-note {
+      margin-top: 2rem; display: inline-flex; align-items: center; gap: .6rem;
+      font-size: .93rem; color: var(--ink-soft);
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 999px; padding: .55rem 1.1rem;
     }
-    .hero p {
-      color: var(--muted);
-      font-size: 1.15rem;
-      max-width: 520px;
-      margin: 0 auto 2.5rem;
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none;
     }
-    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-      padding: 0.85rem 2rem;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      padding: 0.85rem 2rem;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 600;
-      border: 1px solid rgba(255,255,255,0.12);
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.1s;
-    }
-    .btn-secondary:hover { border-color: var(--accent); transform: translateY(-1px); }
 
-    /* STATS */
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 3rem;
-      flex-wrap: wrap;
-      padding: 3rem 6vw;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .stat-item { text-align: center; }
-    .stat-item strong { display: block; font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
-    .stat-item span { color: var(--muted); font-size: 0.88rem; }
-
-    /* FEATURES */
-    .section { padding: 5rem 6vw; }
+    /* ── Sections ─────────────────────────────────────────────────────────── */
+    section { padding: 4.5rem 0; border-top: 1px solid var(--line); }
     .section-label {
-      text-align: center;
-      color: var(--accent);
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 0.75rem;
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--ink-faint); margin-bottom: .9rem;
     }
     h2 {
-      text-align: center;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 0.75rem;
+      font-family: var(--display); font-weight: 400;
+      font-size: clamp(1.7rem, 4vw, 2.3rem); line-height: 1.2;
+      letter-spacing: -0.01em; margin-bottom: .75rem; text-wrap: balance;
     }
-    .section-sub {
-      text-align: center;
-      color: var(--muted);
-      max-width: 480px;
-      margin: 0 auto 3.5rem;
-    }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .feature-card {
-      background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius);
-      padding: 2rem;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .feature-card:hover { border-color: rgba(108,99,255,0.4); transform: translateY(-3px); }
-    .feature-icon {
-      width: 48px; height: 48px;
-      border-radius: 12px;
-      background: rgba(108,99,255,0.15);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.2rem;
-    }
-    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .feature-card p { color: var(--muted); font-size: 0.9rem; }
+    .section-sub { color: var(--ink-soft); max-width: 36rem; margin-bottom: 2.5rem; }
 
-    /* HOW IT WORKS */
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem;
-      max-width: 900px;
-      margin: 0 auto;
-      counter-reset: steps;
+    .grid {
+      display: grid; gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
     }
-    .step { text-align: center; }
-    .step-number {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 800;
-      font-size: 1.1rem;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1.2rem;
+    .card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 1.4rem 1.5rem;
     }
-    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .step p { color: var(--muted); font-size: 0.88rem; }
+    .card h3 { font-size: 1.02rem; margin-bottom: .45rem; letter-spacing: -.01em; }
+    .card p { font-size: .95rem; color: var(--ink-soft); }
 
-    /* TESTIMONIALS */
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      max-width: 1000px;
-      margin: 0 auto;
+    /* Steps — numbered because the order is real: each step needs the one before. */
+    .steps { display: grid; gap: 1.75rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+    .step-num {
+      font-family: var(--display); font-size: 1.6rem; color: var(--accent);
+      line-height: 1; margin-bottom: .5rem;
     }
-    .testimonial {
-      background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius);
-      padding: 1.75rem;
-    }
-    .stars { color: #f59e0b; font-size: 0.9rem; margin-bottom: 0.9rem; }
-    .testimonial p { color: var(--muted); font-size: 0.92rem; margin-bottom: 1.2rem; }
-    .reviewer { display: flex; align-items: center; gap: 0.75rem; }
-    .avatar {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), #a78bfa);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 0.85rem;
-      color: #fff;
-    }
-    .reviewer-info strong { display: block; font-size: 0.88rem; }
-    .reviewer-info span { color: var(--muted); font-size: 0.8rem; }
+    .step h3 { font-size: 1rem; margin-bottom: .35rem; }
+    .step p { font-size: .95rem; color: var(--ink-soft); }
 
-    /* CTA BANNER */
-    .cta-section {
-      padding: 5rem 6vw;
-      text-align: center;
-      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(108,99,255,0.18), transparent);
+    .plain-list { list-style: none; display: grid; gap: .8rem; max-width: 38rem; }
+    .plain-list li {
+      display: flex; gap: .8rem; align-items: baseline;
+      font-size: .97rem; color: var(--ink-soft);
     }
-    .cta-section h2 { margin-bottom: 1rem; }
-    .cta-section p { color: var(--muted); max-width: 440px; margin: 0 auto 2.5rem; }
+    .plain-list li::before {
+      content: "—"; color: var(--accent); flex: none;
+    }
 
-    /* FOOTER */
+    /* ── Footer ───────────────────────────────────────────────────────────── */
     footer {
-      padding: 2rem 6vw;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      color: var(--muted);
-      font-size: 0.85rem;
+      border-top: 1px solid var(--line); padding: 3rem 0 4rem;
+      color: var(--ink-faint); font-size: .9rem;
     }
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--text); }
-    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-row {
+      display: flex; flex-wrap: wrap; gap: 1.25rem;
+      align-items: center; justify-content: space-between; margin-bottom: 1.5rem;
+    }
+    .footer-links { display: flex; gap: 1.25rem; }
+    footer a { color: var(--ink-soft); text-decoration: none; }
+    footer a:hover, footer a:focus-visible { color: var(--ink); text-decoration: underline; }
+    .disclaimer { max-width: 42rem; line-height: 1.6; }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px;
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
-    <div class="logo">my tr<span>AI</span>ner</div>
-    <ul>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#how">How it works</a></li>
-      <li><a href="privacy.html">Privacy</a></li>
-    </ul>
+    <div class="nav-inner">
+      <div class="wordmark">MyTr<span>AI</span>ner</div>
+      <ul class="nav-links">
+        <li><a href="#what">What it does</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+      </ul>
+    </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="badge">AI-Powered Training</div>
-    <h1>Your <span class="highlight">personal trainer</span>,<br>available 24/7</h1>
-    <p>MyTrainer builds adaptive workout plans, tracks your progress, and coaches you in real time — all powered by AI.</p>
-    <div class="hero-actions">
-      <button class="btn-primary">Coming soon to the App Store</button>
-    </div>
-  </section>
+  <header class="hero wrap">
+    <p class="eyebrow">AI personal training</p>
+    <h1>A training plan that survives contact with your actual week.</h1>
+    <p class="lede">
+      MyTrainer writes a program around your goal, your schedule, the equipment you can
+      reach and the injuries you're working around — then changes it when something comes up.
+    </p>
+    <p class="hero-note"><span class="dot"></span> In development · coming to the App Store</p>
+  </header>
 
-  <!-- FEATURES -->
-  <section class="section" id="features">
-    <p class="section-label">Features</p>
-    <h2>Everything you need to train smarter</h2>
-    <p class="section-sub">No guesswork. No one-size-fits-all plans. Just intelligent coaching built around you.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🧠</div>
-        <h3>Adaptive Plans</h3>
-        <p>Your plan evolves automatically based on your performance, recovery, and goals — updated every session.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">💬</div>
+  <section id="what" class="wrap">
+    <p class="section-label">What it does</p>
+    <h2>Built around your constraints, not a template</h2>
+    <p class="section-sub">
+      Most plans assume an ideal week. This one is written from what you actually told it,
+      and rewritten when that changes.
+    </p>
+
+    <div class="grid">
+      <div class="card">
         <h3>Talk to your coach</h3>
-        <p>Ask for a change in plain language — swap a session, work around a busy week, or shift your rest days. The coach proposes the change and you approve it before anything moves.</p>
+        <p>
+          Ask for a change in plain language — move a session, work around a busy week,
+          shift your rest days. The coach proposes the change and you approve it before
+          anything moves.
+        </p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Progress tracking</h3>
-        <p>Log every set — weight, reps, distance, duration — and see your training history and consistency at a glance.</p>
+      <div class="card">
+        <h3>Progress you can see</h3>
+        <p>
+          Log every set — weight, reps, distance, duration — and see your history and
+          consistency without doing arithmetic.
+        </p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">🩹</div>
-        <h3>Built around your injuries</h3>
-        <p>Tell it what hurts and what equipment you have. Your program is written around those constraints, and updated when they change.</p>
+      <div class="card">
+        <h3>Injuries and equipment</h3>
+        <p>
+          Tell it what hurts and what you have access to. Those constraints shape the
+          program from the first day, not as an afterthought.
+        </p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">📖</div>
+      <div class="card">
         <h3>Form guides</h3>
-        <p>Setup, execution, and the common mistakes for any exercise in your plan — written for the goal you're training toward.</p>
+        <p>
+          Setup, execution and the common mistakes for any exercise in your plan,
+          written for the goal you're actually training toward.
+        </p>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon">📶</div>
-        <h3>Works offline</h3>
-        <p>Your program and logs live on your phone, so the gym's dead spot doesn't matter. Everything syncs to your account when you're back online.</p>
+      <div class="card">
+        <h3>Works without signal</h3>
+        <p>
+          Your program and logs live on your phone, so a dead spot in the gym doesn't
+          matter. Everything syncs to your account when you're back online.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Bring your old program</h3>
+        <p>
+          Already running push/pull/legs or a 5×5? Say so during setup and your new plan
+          keeps that shape instead of starting from scratch.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="section" id="how" style="background: var(--surface);">
+  <section id="how" class="wrap">
     <p class="section-label">How it works</p>
-    <h2>Up and running in minutes</h2>
-    <p class="section-sub">Getting started takes less time than a warm-up set.</p>
+    <h2>Four steps, then it gets out of your way</h2>
     <div class="steps">
       <div class="step">
-        <div class="step-number">1</div>
-        <h3>Create your profile</h3>
-        <p>Tell us your goals, fitness level, and available equipment. Takes about 2 minutes.</p>
+        <div class="step-num">1</div>
+        <h3>Answer a few questions</h3>
+        <p>Goal, experience, how many days you have, what equipment, what hurts. Two minutes.</p>
       </div>
       <div class="step">
-        <div class="step-number">2</div>
-        <h3>Get your plan</h3>
-        <p>MyTrainer generates a fully personalised weekly programme instantly — no waiting.</p>
+        <div class="step-num">2</div>
+        <h3>Get your program</h3>
+        <p>A full weekly plan, written around those answers — reviewed by you before it's saved.</p>
       </div>
       <div class="step">
-        <div class="step-number">3</div>
+        <div class="step-num">3</div>
         <h3>Train and log</h3>
-        <p>Work through the session and log each set as you go — weight, reps, distance, or time.</p>
+        <p>Work the session, log each set as you go. It takes seconds and it's what makes the rest work.</p>
       </div>
       <div class="step">
-        <div class="step-number">4</div>
+        <div class="step-num">4</div>
         <h3>Adjust as life happens</h3>
-        <p>Ask the coach to change the plan when your week does. It proposes the change; you approve it.</p>
+        <p>Ask the coach to change the plan when your week changes. You approve every change.</p>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="cta-section">
-    <h2>Not yet released</h2>
-    <p>MyTrainer is in development and heading for the App Store. Nothing to sign up for yet.</p>
+  <section class="wrap">
+    <p class="section-label">Plainly</p>
+    <h2>What it isn't</h2>
+    <p class="section-sub">
+      Worth being clear about, because plenty of fitness apps aren't.
+    </p>
+    <ul class="plain-list">
+      <li>Not a medical device, and not a substitute for advice from a doctor or physio.</li>
+      <li>No ads, no analytics, no tracking you across other apps.</li>
+      <li>Your data isn't sold. You can delete your account and everything in it from inside the app.</li>
+      <li>Coaching replies are generated by AI. They're useful, and they can be wrong.</li>
+    </ul>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="logo">MyTr<span>AI</span>ner</div>
-    <div class="footer-links">
-      <a href="privacy.html">Privacy</a>
-      <a href="mailto:mytrainer.privacy@gmail.com">Contact</a>
+  <footer class="wrap">
+    <div class="footer-row">
+      <div class="wordmark">MyTr<span>AI</span>ner</div>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy policy</a>
+        <a href="mailto:mytrainer.privacy@gmail.com">Contact</a>
+      </div>
     </div>
-    <span>© 2026 MyTrainer. All rights reserved.</span>
+    <p class="disclaimer">
+      MyTrainer provides general fitness guidance and is not a medical device. It does not
+      provide medical advice, diagnosis or treatment — consult a qualified professional
+      before starting or changing an exercise program.
+    </p>
+    <p style="margin-top:1rem">© 2026 MyTrainer</p>
   </footer>
 
 </body>
